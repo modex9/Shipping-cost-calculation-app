@@ -25,7 +25,7 @@
                             </label>
                             <input v-model="num_cars"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="num_cars" min="1" max="8" placeholder="Automobilių kiekis" required>
+                                type="number" name="num_cars" placeholder="Automobilių kiekis">
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -33,7 +33,7 @@
                             </label>
                             <input v-model="distance"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="distance" min="0" placeholder="Atstumas (km)" required>
+                                type="number" name="distance" step="0.1" placeholder="Atstumas (km)">
                         </div>
                     </div>
                     <div v-if="transport_department === 'cargo_truck'">
@@ -43,7 +43,7 @@
                             </label>
                             <input v-model="cargo_weight"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="cargo_weight" min="500" placeholder="Krovinio svoris" required>
+                                type="number" name="cargo_weight" step="0.1" placeholder="Krovinio svoris">
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -51,7 +51,7 @@
                             </label>
                             <input v-model="distance"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="distance" min="0" placeholder="Atstumas (km)" required>
+                                type="number" name="distance" step="0.1" placeholder="Atstumas (km)">
                         </div>
                         <div class="mb-4">
                             <fieldset>
@@ -68,7 +68,7 @@
                     <div class="flex items-center justify-between">
                         <button
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-slate-500"
-                            :disabled="!isFormFilled">
+                            >
                             Submit
                         </button>
                     </div>
@@ -111,6 +111,7 @@ export default {
     methods: {
         formSubmit(e) {
             e.preventDefault();
+            this.errors = [];
             let currentObj = this;
             let formData = {
                 transport_department: this.transport_department,
@@ -123,10 +124,10 @@ export default {
             else if(this.transport_department == 'cargo_truck') {
                 formData.cargo_weight = this.cargo_weight;
                 formData.distance = this.distance;
-                formData.fragile_goods = parseInt(this.fragile_goods);
+                formData.fragile_goods = this.fragile_goods;
             }
             else {
-                alert('blogas pasirinikimas');
+                alert('Pasirinkite transporto skyrių.');
                 return;
             }
 
@@ -135,10 +136,15 @@ export default {
                 if(response.data.errors) {
                     currentObj.errors = response.data.errors;
                 }
-                response = response.data;
             })
             .catch(function (error) {
-                console.error(error);
+                Object.values(error.response.data.errors)[0][0]
+                if(typeof(error.response.data.errors) !== 'undefined') {
+                    currentObj.errors = [];
+                    Object.values(error.response.data.errors).forEach((el) =>
+                        currentObj.errors.push(el[0])
+                    );
+                }
             });
         },
     }

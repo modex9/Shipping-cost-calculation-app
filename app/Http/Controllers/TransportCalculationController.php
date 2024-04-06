@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\ShippingPriceCalculationService;
+use App\Http\Requests\CalculateShippingRequest;
 
 class TransportCalculationController extends Controller
 {
-    public function calculateTransportPrice(Request $request, ShippingPriceCalculationService $shippingPriceCalculationService)
+    public function calculateTransportPrice(CalculateShippingRequest $request, ShippingPriceCalculationService $shippingPriceCalculationService)
     {
         $transportDepartment = $request->input('transport_department');
         if($transportDepartment == 'car_carrier') {
@@ -17,7 +17,9 @@ class TransportCalculationController extends Controller
 
         }
         else {
-
+            return [
+                'errors' => ['Nepasirinktas transporto skyrius'],
+            ];
         }
     }
 }
