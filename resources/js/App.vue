@@ -23,9 +23,9 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2">
                                 Automobilių kiekis
                             </label>
-                            <input v-model="n_vehicles"
+                            <input v-model="num_cars"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="n_vehicles" min="1" max="8" placeholder="Automobilių kiekis" required>
+                                type="number" name="num_cars" min="1" max="8" placeholder="Automobilių kiekis" required>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -84,7 +84,7 @@ export default {
     data() {
         return {
             transport_department: '',
-            n_vehicles: '',
+            num_cars: '',
             distance: '',
             cargo_weight: '',
             fragile_goods: '',
@@ -93,7 +93,7 @@ export default {
     },
     computed: {
             isCarCarrierFormFilled() {
-                return !!this.n_vehicles && !!this.distance;
+                return !!this.num_cars && !!this.distance;
             },
             isCargoTruckFormFilled() {
                 return !!this.cargo_weight && !!this.distance && !!this.fragile_goods;
@@ -117,7 +117,7 @@ export default {
             };
 
             if(this.transport_department == 'car_carrier') {
-                formData.n_vehicles = this.n_vehicles;
+                formData.num_cars = this.num_cars;
                 formData.distance = this.distance;
             }
             else if(this.transport_department == 'cargo_truck') {
