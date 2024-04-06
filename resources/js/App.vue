@@ -3,9 +3,9 @@
         class="rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 px-3 py-10 bg-gray-200 flex justify-center">
         <div class="w-full max-w-md">
             <div class="w-full max-w-md">
-                <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit="formSubmit" ref="formRef">
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="transport_department">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
                             Transporto skyrius
                         </label>
                         <select v-model="transport_department" name='transport_department'
@@ -17,55 +17,55 @@
                     </div>
                     <div v-if="transport_department === 'car_carrier'">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="n_vehicles">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
                                 Automobilių kiekis
                             </label>
-                            <input
+                            <input v-model="n_vehicles"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="n_vehicles" min="1" max="8" placeholder="Automobilių kiekis">
+                                type="number" name="n_vehicles" min="1" max="8" placeholder="Automobilių kiekis" required>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="distance">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
                                 Atstumas (km)
                             </label>
-                            <input
+                            <input v-model="distance"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="distance" min="0" placeholder="Atstumas (km)">
+                                type="number" name="distance" min="0" placeholder="Atstumas (km)" required>
                         </div>
                     </div>
                     <div v-if="transport_department === 'cargo_truck'">
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="cargo_weight">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
                                 Krovinio svoris
                             </label>
-                            <input
+                            <input v-model="cargo_weight"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="cargo_weight" min="500" placeholder="Krovinio svoris">
+                                type="number" name="cargo_weight" min="500" placeholder="Krovinio svoris" required>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="distance">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
                                 Atstumas (km)
                             </label>
-                            <input
+                            <input v-model="distance"
                                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="distance" min="0" placeholder="Atstumas (km)">
+                                type="number" name="distance" min="0" placeholder="Atstumas (km)" required>
                         </div>
                         <div class="mb-4">
                             <fieldset>
                                 <label class="block text-gray-700 text-sm font-bold mb-2">Pavojingas krovinys</label>
 
-                                <input type="radio" name="fragile_goods" value="1" id="fragile_goods_yes"/>
+                                <input v-model="fragile_goods" type="radio" name="fragile_goods" value="1" id="fragile_goods_yes"/>
                                 <label class="text-gray-700 text-sm font-bold mb-2 mr-2 ml-1" for="fragile_goods_yes">Taip</label>
 
-                                <input type="radio" name="fragile_goods" value="0" id="fragile_goods_no"/>
+                                <input v-model="fragile_goods" type="radio" name="fragile_goods" value="0" id="fragile_goods_no"/>
                                 <label class="text-gray-700 text-sm font-bold mb-2 mr-2 ml-1" for="fragile_goods_no">Ne</label>
                             </fieldset>
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
                         <button
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="button">
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-slate-500"
+                            :disabled="!isFormFilled">
                             Submit
                         </button>
                     </div>
@@ -80,8 +80,67 @@
 export default {
     data() {
         return {
-            transport_department: ''
+            transport_department: '',
+            n_vehicles: '',
+            distance: '',
+            cargo_weight: '',
+            fragile_goods: '',
         };
+    },
+    computed: {
+            isCarCarrierFormFilled() {
+                return !!this.n_vehicles && !!this.distance;
+            },
+            isCargoTruckFormFilled() {
+                return !!this.cargo_weight && !!this.distance && !!this.fragile_goods;
+            },
+            isFormFilled() {
+                if(this.transport_department == 'car_carrier') {
+                    return this.isCarCarrierFormFilled;
+                }
+                if(this.transport_department == 'cargo_truck') {
+                    return this.isCargoTruckFormFilled;
+                }
+                return false;
+            }
+    },
+    methods: {
+        validateCarCarrierForm() {
+
+        },
+        validateCargoTruckForm() {
+
+        },
+        formSubmit(e) {
+            e.preventDefault();
+            let currentObj = this;
+            let formData = {
+                transport_department: this.transport_department,
+            };
+
+            if(this.transport_department == 'car_carrier') {
+                formData.n_vehicles = this.n_vehicles;
+                formData.distance = this.distance;
+            }
+            else if(this.transport_department == 'cargo_truck') {
+                formData.cargo_weight = this.cargo_weight;
+                formData.distance = this.distance;
+                formData.fragile_goods = parseInt(this.fragile_goods);
+            }
+            else {
+                alert('blogas pasirinikimas');
+                return;
+            }
+
+            this.axios.post('http://localhost:8000/yourPostApi', formData)
+            .then(function (response) {
+                currentObj.output = response.data;
+            })
+            .catch(function (error) {
+                currentObj.output = error;
+            });
+        },
     }
 };
+
 </script>
