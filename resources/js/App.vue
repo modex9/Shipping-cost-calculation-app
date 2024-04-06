@@ -3,6 +3,9 @@
         class="rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 px-3 py-10 bg-gray-200 flex justify-center">
         <div class="w-full max-w-md">
             <div class="w-full max-w-md">
+                <div v-for="error in errors" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <span class="font-medium">Klaida!</span> {{ error }}
+                </div>
                 <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit="formSubmit" ref="formRef">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -85,6 +88,7 @@ export default {
             distance: '',
             cargo_weight: '',
             fragile_goods: '',
+            errors: '',
         };
     },
     computed: {
@@ -105,12 +109,6 @@ export default {
             }
     },
     methods: {
-        validateCarCarrierForm() {
-
-        },
-        validateCargoTruckForm() {
-
-        },
         formSubmit(e) {
             e.preventDefault();
             let currentObj = this;
@@ -132,12 +130,15 @@ export default {
                 return;
             }
 
-            this.axios.post('http://localhost:8000/yourPostApi', formData)
+            this.axios.post('http://localhost:8000/calculate', formData)
             .then(function (response) {
-                currentObj.output = response.data;
+                if(response.data.errors) {
+                    currentObj.errors = response.data.errors;
+                }
+                response = response.data;
             })
             .catch(function (error) {
-                currentObj.output = error;
+                console.error(error);
             });
         },
     }
