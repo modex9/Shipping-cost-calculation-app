@@ -76,10 +76,11 @@
             </div>
         </div>
     </div>
-
+    <shipment-table></shipment-table>
 </template>
 
 <script>
+import ShipmentTable from './ShipmentTable.vue';
 export default {
     data() {
         return {
@@ -90,6 +91,9 @@ export default {
             fragile_goods: '',
             errors: '',
         };
+    },
+    components: {
+        ShipmentTable
     },
     computed: {
             isCarCarrierFormFilled() {
