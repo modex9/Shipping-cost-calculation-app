@@ -69,7 +69,7 @@
                         <button
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-slate-500"
                             >
-                            Submit
+                            Skaičiuoti
                         </button>
                     </div>
                 </form>
@@ -138,6 +138,9 @@ export default {
                 }
             })
             .catch(function (error) {
+                if(typeof(error.response) == "undefined") {
+                    return;
+                }
                 Object.values(error.response.data.errors)[0][0]
                 if(typeof(error.response.data.errors) !== 'undefined') {
                     currentObj.errors = [];
