@@ -11,10 +11,10 @@
             </thead>
             <tbody class="bg-white dark:bg-slate-800">
             <tr v-for="shipment in shipments">
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ shipment.created_at }}</td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">{{ shipment.transport_department }}</td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">{{ shipment.cargoData }}</td>
-                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pr-8 text-slate-500 dark:text-slate-400">{{ shipment.price }} EUR</td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-2 pl-8 text-slate-500 dark:text-slate-400">{{ shipment.created_at }}</td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-2 text-slate-500 dark:text-slate-400">{{ shipment.transport_department }}</td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-2 pr-8 text-slate-500 dark:text-slate-400">{{ shipment.cargoData }}</td>
+                <td class="border-b border-slate-100 dark:border-slate-700 p-2 pr-8 text-slate-500 dark:text-slate-400">{{ shipment.price }} EUR</td>
             </tr>
             </tbody>
         </table>

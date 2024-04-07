@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    <shipment-table></shipment-table>
+    <shipment-table :key="shipmentTableKey"></shipment-table>
 </template>
 
 <script>
@@ -90,6 +90,7 @@ export default {
             cargo_weight: '',
             fragile_goods: '',
             errors: '',
+            shipmentTableKey: 0,
         };
     },
     components: {
@@ -140,6 +141,9 @@ export default {
                 if(response.data.errors) {
                     currentObj.errors = response.data.errors;
                 }
+                else {
+                    currentObj.refresh();
+                }
             })
             .catch(function (error) {
                 if(typeof(error.response) == "undefined") {
@@ -154,6 +158,9 @@ export default {
                 }
             });
         },
+        refresh() {
+            this.shipmentTableKey += 1;
+        }
     }
 };
 
