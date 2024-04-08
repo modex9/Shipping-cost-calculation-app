@@ -24,7 +24,7 @@ class CalculateShippingRequest extends FormRequest
         return [
             'transport_department' => 'required',
             'cargo_weight' => 'required_if:transport_department,cargo_truck|gte:500',
-            'distance' => 'required|gt:0',
+            'distance' => 'required_unless:transport_department,null|gt:0',
             'num_cars' => 'required_if:transport_department,car_carrier|integer|min:1|max:8',
             'fragile_goods' => 'required_if:transport_department,cargo_truck|boolean',
         ];
@@ -39,7 +39,7 @@ class CalculateShippingRequest extends FormRequest
             'num_cars.max' => 'Automobilių kiekis negali viršyti 8.',
             'num_cars.integer' => 'Nenurodytas automobilių kiekis.',
             'num_cars.required_if' => 'Nenurodytas automobilių kiekis.',
-            'distance.required' => 'Nenurodytas atstumas.',
+            'distance.required_unless' => 'Nenurodytas atstumas.',
             'distance.gt' => 'Atstumas turi būti didesnis už 0.',
             'fragile_goods.boolean' => 'Pažymėkite, ar tai pavojingas krovinys.',
             'fragile_goods.required_if' => 'Pažymėkite, ar tai pavojingas krovinys.',

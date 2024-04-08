@@ -48,37 +48,40 @@
 </template>
 
 <script>
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
 export default {
-    data() {
-        return {
-            shipments: [],
-            filter: '',
-        };
-    },
-    computed: {
-        filteredShipments() {
-            return this.shipments.filter(shipment => {
-                const type = shipment.transport_department.toString().toLowerCase();
-                const searchTerm = this.filter.toLowerCase();
-                return type.includes(searchTerm);
-            });
-        }
-    },
-    created() {
-        this.fetchShipments();
-    },
-    methods: {
-        fetchShipments() {
-            axios.get('/api/shipments')
-                .then(response => {
-                    this.shipments = response.data;
-                })
-                .catch(error => {
-                    console.error('Error fetching shipments:', error);
-                });
-        }
-    }
+  setup() {
+    const shipments = ref([]);
+    const filter = ref('');
+
+    const fetchShipments = () => {
+      axios
+        .get('/api/shipments')
+        .then(response => {
+          shipments.value = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching shipments:', error);
+        });
+    };
+
+    const filteredShipments = computed(() => {
+      return shipments.value.filter(shipment => {
+        const type = shipment.transport_department.toString().toLowerCase();
+        const searchTerm = filter.value.toLowerCase();
+        return type.includes(searchTerm);
+      });
+    });
+
+    onMounted(fetchShipments);
+
+    return {
+      shipments,
+      filter,
+      filteredShipments,
+    };
+  }
 };
 </script>

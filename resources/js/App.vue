@@ -13,64 +13,16 @@
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             Transporto skyrius
                         </label>
-                        <select v-model="transport_department" name='transport_department'
+                        <select v-model="transport_department" name='transport_department' @change="clearFormData"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option disabled value="">Pasirinkite transporto skyrių</option>
                             <option value="car_carrier">Autovežis</option>
                             <option value="cargo_truck">Vilkikas su tentine priekaba</option>
                         </select>
                     </div>
-                    <div v-if="transport_department === 'car_carrier'">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">
-                                Automobilių kiekis
-                            </label>
-                            <input v-model="num_cars"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="num_cars" placeholder="Automobilių kiekis">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">
-                                Atstumas (km)
-                            </label>
-                            <input v-model="distance"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="distance" step="0.1" placeholder="Atstumas (km)">
-                        </div>
-                    </div>
-                    <div v-if="transport_department === 'cargo_truck'">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">
-                                Krovinio svoris
-                            </label>
-                            <input v-model="cargo_weight"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="cargo_weight" step="0.1" placeholder="Krovinio svoris">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2">
-                                Atstumas (km)
-                            </label>
-                            <input v-model="distance"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="number" name="distance" step="0.1" placeholder="Atstumas (km)">
-                        </div>
-                        <div class="mb-4">
-                            <fieldset>
-                                <label class="block text-gray-700 text-sm font-bold mb-2">Pavojingas krovinys</label>
+                    <car-carrier v-if="transport_department === 'car_carrier'" @form-data="updateFormData"></car-carrier>
+                    <cargo-truck v-if="transport_department === 'cargo_truck'" @form-data="updateFormData"></cargo-truck>
 
-                                <input v-model="fragile_goods" type="radio" name="fragile_goods" value="1"
-                                    id="fragile_goods_yes" />
-                                <label class="text-gray-700 text-sm font-bold mb-2 mr-2 ml-1"
-                                    for="fragile_goods_yes">Taip</label>
-
-                                <input v-model="fragile_goods" type="radio" name="fragile_goods" value="0"
-                                    id="fragile_goods_no" />
-                                <label class="text-gray-700 text-sm font-bold mb-2 mr-2 ml-1"
-                                    for="fragile_goods_no">Ne</label>
-                            </fieldset>
-                        </div>
-                    </div>
                     <div class="flex items-center justify-between">
                         <button
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-slate-500">
@@ -85,71 +37,59 @@
 </template>
 
 <script>
+import { ref, reactive } from 'vue';
 import ShipmentTable from './ShipmentTable.vue';
+import CarCarrier from './CarrierForms/CarCarrier.vue';
+import CargoTruck from './CarrierForms/CargoTruck.vue';
+
 export default {
-    data() {
-        return {
-            transport_department: '',
-            num_cars: '',
-            distance: '',
-            cargo_weight: '',
-            fragile_goods: '',
-            errors: '',
-            shipmentTableKey: 0,
-        };
-    },
     components: {
-        ShipmentTable
+        ShipmentTable, CarCarrier, CargoTruck
     },
-    methods: {
-        formSubmit(e) {
+    setup() {
+        const transport_department = ref('');
+        const errors = ref([]);
+        const shipmentTableKey = ref(0);
+        const formData = ref({});
+        const updateFormData = (data) => {
+            formData.value = { ...formData.value, ...data };
+        };
+
+        const clearFormData = () => {
+            formData.value = {};
+        };
+
+        const formSubmit = (e) => {
+            formData.value = { ...formData.value, transport_department : transport_department.value };
             e.preventDefault();
-            this.errors = [];
-            let currentObj = this;
-            let formData = {
-                transport_department: this.transport_department,
-            };
-
-            if (this.transport_department == 'car_carrier') {
-                formData.num_cars = this.num_cars;
-                formData.distance = this.distance;
-            }
-            else if (this.transport_department == 'cargo_truck') {
-                formData.cargo_weight = this.cargo_weight;
-                formData.distance = this.distance;
-                formData.fragile_goods = this.fragile_goods;
-            }
-            else {
-                alert('Pasirinkite transporto skyrių.');
-                return;
-            }
-
-            this.axios.post('http://localhost:8000/calculate', formData)
-                .then(function (response) {
+            errors.value = [];
+            axios.post('http://localhost:8000/calculate', formData.value)
+                .then(response => {
                     if (response.data.errors) {
-                        currentObj.errors = response.data.errors;
-                    }
-                    else {
-                        currentObj.refresh();
+                        errors.value = response.data.errors;
+                    } else {
+                        refresh();
                     }
                 })
-                .catch(function (error) {
-                    if (typeof (error.response) == "undefined") {
-                        return;
-                    }
-                    Object.values(error.response.data.errors)[0][0]
-                    if (typeof (error.response.data.errors) !== 'undefined') {
-                        currentObj.errors = [];
-                        Object.values(error.response.data.errors).forEach((el) =>
-                            currentObj.errors.push(el[0])
-                        );
+                .catch(error => {
+                    if (error.response && error.response.data.errors) {
+                        errors.value = Object.values(error.response.data.errors).flat();
                     }
                 });
-        },
-        refresh() {
-            this.shipmentTableKey += 1;
-        }
+        };
+
+        const refresh = () => {
+            shipmentTableKey.value += 1;
+        };
+
+        return {
+            transport_department,
+            errors,
+            shipmentTableKey,
+            updateFormData,
+            formSubmit,
+            clearFormData,
+        };
     }
 };
-
 </script>
