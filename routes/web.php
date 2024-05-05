@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TransportCalculationController;
+use App\Http\Controllers\ShipmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,6 @@ use App\Http\Controllers\TransportCalculationController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ShipmentsController::class, 'index']);
 
 Route::post('calculate', [TransportCalculationController::class, 'calculateTransportPrice'])->name('calculateTransportPrice');
