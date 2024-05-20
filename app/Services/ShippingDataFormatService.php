@@ -14,6 +14,8 @@ class ShippingDataFormatService
     }
 
     public function format(Shipment $shipment) {
+        $shipmentFormatClass = config('carrier-format-map.' . $shipment->transport_department);
+        $this->setShipmentFormat(new $shipmentFormatClass());
         return $this->shippingDataFormatContract->formatShipmentData($shipment);
     }
 }

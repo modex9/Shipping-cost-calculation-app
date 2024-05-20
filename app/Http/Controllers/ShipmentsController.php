@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\MouseHouse;
+use App\Http\Resources\ShipmentResource;
 use App\Models\Shipment;
 use App\Services\ShippingDataFormatService;
 use App\Strategy\ShipmentDataFormat\CarCarrierFormat;
@@ -16,27 +18,14 @@ class ShipmentsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index(ShippingDataFormatService $shippingDataFormatService)
-    // {
-    //     $shipments = Shipment::all();
-    //     foreach($shipments as $shipment) {
-    //         if($shipment->transport_department == ShippingTypes::CAR_CARRIER->value) {
-    //             $shippingDataFormatService->setShipmentFormat(new CarCarrierFormat());
-    //         }
-    //         elseif($shipment->transport_department == ShippingTypes::CARGO_TRUCK->value) {
-    //             $shippingDataFormatService->setShipmentFormat(new CargoTruckFormat());
-    //         }
-    //         $shipment->transport_department = ShippingTypes::tryFrom($shipment->transport_department)->translated();
-    //         $shipment->cargoData = $shippingDataFormatService->format($shipment);
-
-    //     }
-    //     return response()->json($shipments);
-    // }
-
-    public function index() : Response
+    public function index(ShippingDataFormatService $shippingDataFormatService) : Response
     {
+        $shipments = Shipment::all();
+        foreach($shipments as $shipment) {
+            $shipment->cargoData = $shippingDataFormatService->format($shipment);
+        }
         return Inertia::render('Shipment', [
-            'shipments' => Shipment::all(),
+            'shipments' => ShipmentResource::collection($shipments),
         ]);
     }
 }

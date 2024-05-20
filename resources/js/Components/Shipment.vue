@@ -6,21 +6,22 @@
       <div class="bg-white rounded-md shadow overflow-x-auto">
         <table class="w-full whitespace-nowrap">
           <tr class="text-left font-bold">
-            <th class="pb-4 pt-6 px-6">ID</th>
-            <th class="pb-4 pt-6 px-6">Transport Department</th>
-            <th class="pb-4 pt-6 px-6">Distance</th>
-            <th class="pb-4 pt-6 px-6">Num cars</th>
-            <th class="pb-4 pt-6 px-6">Cargo Weight</th>
+            <th class="pb-4 pt-6">Data</th>
+            <th class="pb-4 pt-6">Transport Department</th>
+            <th class="pb-4 pt-6">Cargo Data</th>
+            <th class="pb-4 pt-6">Num cars</th>
+            <th class="pb-4 pt-6">Cargo Weight</th>
           </tr>
-          <tr v-for="shipment in $page.props.shipments" :key="shipment.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+          <tr v-for="shipment in $page.props.shipments.data" :key="shipment.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+
             <td class="border-t">
-                {{ shipment.id }}
+                {{ shipment.created_at }}
             </td>
             <td class="border-t">
                 {{ shipment.transport_department }}
             </td>
             <td class="border-t">
-                {{ shipment.distance }}
+                {{ shipment.cargoData }}
             </td>
             <td class="border-t">
                 {{ shipment.num_cars }}
