@@ -9,8 +9,7 @@
             <th class="pb-4 pt-6">Data</th>
             <th class="pb-4 pt-6">Transport Department</th>
             <th class="pb-4 pt-6">Cargo Data</th>
-            <th class="pb-4 pt-6">Num cars</th>
-            <th class="pb-4 pt-6">Cargo Weight</th>
+            <th class="pb-4 pt-6">Price</th>
           </tr>
           <tr v-for="shipment in $page.props.shipments.data" :key="shipment.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
 
@@ -24,10 +23,7 @@
                 {{ shipment.cargoData }}
             </td>
             <td class="border-t">
-                {{ shipment.num_cars }}
-            </td>
-            <td class="border-t">
-                {{ shipment.cargo_weight }}
+                {{ shipment.price }} EUR
             </td>
           </tr>
         </table>
