@@ -11,19 +11,19 @@
             <th class="pb-4 pt-6">Cargo Data</th>
             <th class="pb-4 pt-6">Price</th>
           </tr>
-          <tr v-for="shipment in $page.props.shipments.data" :key="shipment.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+          <tr v-for="{created_at, transport_department, cargoData, price} in $page.props.shipments.data" :key="{id}" class="hover:bg-gray-100 focus-within:bg-gray-100">
 
             <td class="border-t">
-                {{ shipment.created_at }}
+                {{ created_at }}
             </td>
             <td class="border-t">
-                {{ shipment.transport_department }}
+                {{ transport_department }}
             </td>
             <td class="border-t">
-                {{ shipment.cargoData }}
+                {{ cargoData }}
             </td>
             <td class="border-t">
-                {{ shipment.price }} EUR
+                {{ price }} EUR
             </td>
           </tr>
         </table>
@@ -31,13 +31,6 @@
     </div>
   </template>
 
-  <script>
-  import { Head, Link } from '@inertiajs/inertia-vue3'
-
-  export default {
-    components: {
-      Head,
-      Link,
-    },
-  }
+  <script setup>
+    import { Head, Link } from '@inertiajs/inertia-vue3'
   </script>
