@@ -19,7 +19,7 @@ class ShipmentsController extends Controller
         foreach($shipments as $shipment) {
             $shipment->cargoData = $shippingDataFormatService->format($shipment);
         }
-        return Inertia::render('Shipment', [
+        return Inertia::render('ShipmentsApp', [
             'shipments' => ShipmentResource::collection($shipments),
         ]);
     }
