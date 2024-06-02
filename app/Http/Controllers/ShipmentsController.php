@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\MouseHouse;
 use App\Http\Resources\ShipmentResource;
 use App\Models\Shipment;
 use App\Services\ShippingDataFormatService;
-use App\Strategy\ShipmentDataFormat\CarCarrierFormat;
-use App\Strategy\ShipmentDataFormat\CargoTruckFormat;
-use App\Enums\ShippingTypes;
-
 use Inertia\Inertia;
 use Inertia\Response;
 

@@ -21,6 +21,7 @@ class ShipmentResource extends JsonResource
             'transport_department' => ShippingTypes::tryFrom($this->transport_department)->translated(),
             'cargoData' => $this->whenHas('cargoData'),
             'price' => $this->price,
+            'visible' => true,
         ];
     }
 }
