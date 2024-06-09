@@ -15,12 +15,13 @@ class ShipmentsController extends Controller
      */
     public function index(ShippingDataFormatService $shippingDataFormatService) : Response
     {
-        $shipments = Shipment::query()->latest()->get();
+        $shipments = Shipment::query()->latest()->paginate(5);
         foreach($shipments as $shipment) {
             $shipment->cargoData = $shippingDataFormatService->format($shipment);
         }
         return Inertia::render('ShipmentsApp', [
             'shipments' => ShipmentResource::collection($shipments),
+            'paginationLinks' => $shipments->links()->toHtml()
         ]);
     }
 }
