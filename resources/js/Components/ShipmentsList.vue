@@ -47,7 +47,7 @@
 
   <script setup>
     import { ref, watch } from 'vue';
-    import { Head } from '@inertiajs/inertia-vue3'
+    import { Head } from '@inertiajs/inertia-vue3';
     const filter = ref('');
     watch(filter, function(query) {
         props.shipments.data.forEach(shipment => {

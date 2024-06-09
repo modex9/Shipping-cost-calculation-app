@@ -15,7 +15,7 @@ class ShipmentsController extends Controller
      */
     public function index(ShippingDataFormatService $shippingDataFormatService) : Response
     {
-        $shipments = Shipment::all();
+        $shipments = Shipment::query()->latest()->get();
         foreach($shipments as $shipment) {
             $shipment->cargoData = $shippingDataFormatService->format($shipment);
         }
