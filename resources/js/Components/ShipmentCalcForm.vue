@@ -8,12 +8,12 @@
                     role="alert">
                     <span class="font-medium">Klaida!</span> {{ error }}
                 </div>
-                <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="form.post('/calculate'); clearFormData()">
+                <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="form.post('/calculate')">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             Transporto skyrius
                         </label>
-                        <select v-model="form.transport_department" name='transport_department' @change="clearFormData"
+                        <select v-model="form.transport_department" name='transport_department'
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                             <option disabled value="">Pasirinkite transporto skyrių</option>
                             <option value="car_carrier">Autovežis</option>
@@ -46,9 +46,6 @@ import CarCarrier from './CarrierForms/CarCarrier.vue';
 import CargoTruck from './CarrierForms/CargoTruck.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 
-const clearFormData = () => {
-    form.reset({'cargo_weight': ''});
-};
 const form = useForm({
     transport_department: '',
     car_carrier : {

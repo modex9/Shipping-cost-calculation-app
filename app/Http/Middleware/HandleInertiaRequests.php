@@ -35,8 +35,11 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $route = $request->route();
+        $controller = $route->action['controller'];
         return array_merge(parent::share($request), [
-            //
+            'controller' => $controller,
+            'perPage' => session($controller . "_per_page"),
         ]);
     }
 }

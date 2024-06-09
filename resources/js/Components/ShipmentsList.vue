@@ -2,7 +2,7 @@
     <div>
       <Head title="Shipments" />
       <h1 class="mb-8 text-3xl font-bold">Shipments</h1>
-
+      <PerPage/>
       <div class="bg-white rounded-md shadow overflow-x-auto">
         <div class="w-full">
             <div class="grid grid-cols-4 pb-3">
@@ -64,6 +64,8 @@
   <script setup>
     import { ref, watch } from 'vue';
     import { Head, Link } from '@inertiajs/inertia-vue3';
+    import PerPage from "./PerPage.vue";
+
     const filter = ref('');
     watch(filter, function(query) {
         props.shipments.data.forEach(shipment => {

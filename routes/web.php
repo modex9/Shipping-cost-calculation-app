@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SetPerPageController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TransportCalculationController;
@@ -19,3 +20,4 @@ use App\Http\Controllers\ShipmentsController;
 Route::get('/', [ShipmentsController::class, 'index']);
 
 Route::post('calculate', [TransportCalculationController::class, 'calculateTransportPrice'])->name('calculateTransportPrice');
+Route::post('per-page/{perPage}', [SetPerPageController::class, 'setPerPage'])->name('perPage');
